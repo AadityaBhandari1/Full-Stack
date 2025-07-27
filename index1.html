@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CU Bank Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f6f8;
+    }
+  </style>
+</head>
+<body class="text-gray-800">
+
+  <div class="max-w-4xl mx-auto px-4 py-10">
+    <!-- Card Container -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+
+      <!-- Header -->
+      <div class="flex justify-between items-center p-6 border-b border-gray-200 bg-gradient-to-r from-red-600 to-red-500 text-white">
+        <div class="flex items-center gap-4">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-Mx5Ca8jO1s4RjWBQKke3YPNGUsLU2KCrMA&s" alt="CU Logo" class="h-10"/>
+          <h1 class="text-2xl font-bold tracking-wide">CU Bank</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-semibold hidden sm:inline">Aditya Bhandari</span>
+          <div class="w-10 h-10 rounded-full bg-white text-red-600 flex items-center justify-center font-bold border-2 border-white">
+            AB
+          </div>
+        </div>
+      </div>
+
+      <!-- Balance -->
+      <div class="px-6 py-6 bg-gray-50 border-b border-gray-200">
+        <p class="text-sm text-gray-500">Available Balance</p>
+        <p id="balance-display" class="text-3xl font-extrabold text-gray-800 truncate">₹50,000.00</p>
+      </div>
+
+      <!-- Form Section -->
+      <div class="p-6 bg-white">
+        <label for="amount-input" class="block text-sm font-medium mb-2">Enter Amount</label>
+        <div class="relative mb-4">
+          <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-bold">₹</span>
+          <input type="number" id="amount-input" placeholder="0.00"
+            class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"/>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <button id="deposit-btn"
+            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow transition duration-150">
+            Deposit
+          </button>
+          <button id="withdraw-btn"
+            class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow transition duration-150">
+            Withdraw
+          </button>
+        </div>
+
+        <div id="message-box" class="text-center text-sm font-medium p-2 rounded-lg hidden"></div>
+
+        <!-- Transaction History -->
+        <div class="mt-8">
+          <h2 class="text-lg font-semibold mb-2 text-gray-700">Recent Transactions</h2>
+          <div id="transaction-list" class="space-y-3 max-h-48 overflow-y-auto pr-2">
+            <p class="text-sm text-gray-400 text-center">No recent transactions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Logic -->
+  <script>
+    const balanceDisplay = document.getElementById('balance-display');
+    const amountInput = document.getElementById('amount-input');
+    const depositBtn = document.getElementById('deposit-btn');
+    const withdrawBtn = document.getElementById('withdraw-btn');
+    const transactionList = document.getElementById('transaction-list');
+    const messageBox = document.getElementById('message-box');
+
+    let currentBalance = 50000.00;
+
+    const formatCurrency = (amount) => {
+      return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR'
+      }).format(amount);
+    };
+
+    const showMessage = (text, type = 'success') => {
+      messageBox.textContent = text;
+      messageBox.classList.remove('hidden');
+      messageBox.className = `text-center text-sm font-medium p-2 rounded-lg mb-4 ${
+        type === 'success'
+          ? 'bg-green-100 text-green-800'
+          : 'bg-red-100 text-red-800'
+      }`;
+      setTimeout(() => {
+        messageBox.classList.add('hidden');
+      }, 3000);
+    };
+
+    const addTransaction = (type, amount) => {
+      const initial = transactionList.querySelector('p');
+      if (initial) initial.remove();
+
+      const div = document.createElement('div');
+      div.className = 'flex justify-between items-center bg-gray-100 p-3 rounded-lg';
+      div.innerHTML = `
+        <div>
+          <p class="font-semibold">${type}</p>
+          <p class="text-xs text-gray-500">${new Date().toLocaleString()}</p>
+        </div>
+        <p class="font-bold ${type === 'Deposit' ? 'text-green-600' : 'text-red-600'}">${type === 'Deposit' ? '+' : '-'} ${formatCurrency(amount)}</p>
+      `;
+      transactionList.prepend(div);
+    };
+
+    const updateDisplay = () => {
+      balanceDisplay.textContent = formatCurrency(currentBalance);
+    };
+
+    const handleDeposit = () => {
+      const amount = parseFloat(amountInput.value);
+      if (isNaN(amount) || amount <= 0) return showMessage('Enter a valid amount.', 'error');
+      currentBalance += amount;
+      updateDisplay();
+      addTransaction('Deposit', amount);
+      showMessage(`Deposited ${formatCurrency(amount)} successfully!`);
+      amountInput.value = '';
+    };
+
+    const handleWithdraw = () => {
+      const amount = parseFloat(amountInput.value);
+      if (isNaN(amount) || amount <= 0) return showMessage('Enter a valid amount.', 'error');
+      if (amount > currentBalance) return showMessage('Insufficient balance.', 'error');
+      currentBalance -= amount;
+      updateDisplay();
+      addTransaction('Withdraw', amount);
+      showMessage(`Withdrew ${formatCurrency(amount)} successfully!`);
+      amountInput.value = '';
+    };
+
+    depositBtn.addEventListener('click', handleDeposit);
+    withdrawBtn.addEventListener('click', handleWithdraw);
+  </script>
+</body>
+</html>
