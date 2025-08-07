@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+  />
+
+  <style>
+    :root {
+      --bg-color: #f5f7fa;
+      --card-bg: #ffffff;
+      --text-color: #222;
+      --sidebar-bg: #1e2a38;
+      --sidebar-text: #fff;
+      --accent-color: #007bff;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --card-bg: #1f1f1f;
+      --text-color: #ffffff;
+      --sidebar-bg: #111827;
+      --sidebar-text: #e5e7eb;
+      --accent-color: #66ccff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-areas:
+        "header header"
+        "sidebar main";
+      grid-template-columns: 250px 1fr;
+      grid-template-rows: 70px 1fr;
+      height: 100vh;
+    }
+
+    header {
+      grid-area: header;
+      background-color: var(--card-bg);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    header h2 {
+      font-size: 1.5rem;
+    }
+
+    .theme-switch {
+      background-color: var(--accent-color);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    aside {
+      grid-area: sidebar;
+      background-color: var(--sidebar-bg);
+      color: var(--sidebar-text);
+      padding: 2rem 1rem;
+    }
+
+    aside h3 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    nav ul {
+      list-style: none;
+    }
+
+    nav ul li {
+      margin: 1rem 0;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--sidebar-text);
+      font-size: 1rem;
+      display: block;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    nav ul li a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    main {
+      grid-area: main;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .card img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      object-fit: cover;
+    }
+
+    .icon {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+      margin-right: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-areas:
+          "header"
+          "main";
+        grid-template-columns: 1fr;
+        grid-template-rows: 70px 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body data-theme="light">
+  <div class="dashboard">
+    <header>
+      <h2><i class="fa-solid fa-chart-line icon"></i>Admin Panel</h2>
+      <button class="theme-switch" onclick="toggleTheme()">Toggle Theme</button>
+    </header>
+
+    <aside>
+      <h3>Admin Menu</h3>
+      <nav>
+        <ul>
+          <li><a href="#"><i class="fa-solid fa-gauge icon"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa-solid fa-users icon"></i> Users</a></li>
+          <li><a href="#"><i class="fa-solid fa-cogs icon"></i> Settings</a></li>
+          <li><a href="#"><i class="fa-solid fa-file-lines icon"></i> Reports</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="card">
+        <h4><i class="fa-solid fa-user icon"></i>Total Users</h4>
+        <p>1,234</p>
+        <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQw9hoMf8tdyfb9JwRCYSzyc9pOsiDcKa3a6YOKQZ92lVbtSH0a" alt="user" />
+      </div>
+
+      <div class="card">
+        <h4><i class="fa-solid fa-indian-rupee-sign icon"></i>Revenue</h4>
+        <p>₹3,23,458</p>
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQHZynpxp9WfDg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1679488209072?e=2147483647&v=beta&t=qEQ30X3YoY3yId9-JgoyiU1jHxLXJULtgY4jc_ZLmMY" alt="revenue" />
+      </div>
+
+      <div class="card">
+        <h4><i class="fa-solid fa-user-plus icon"></i>New Signups</h4>
+        <p>321</p>
+        <img src="https://pratapgauravkendra.org/wp-content/uploads/2024/02/MODIJI.png" alt="signup" />
+      </div>
+
+      <div class="card">
+        <h4><i class="fa-solid fa-headset icon"></i>Support Tickets</h4>
+        <p>27x7 Open</p>
+        <img src="https://www.elections.in/political-leaders/images/rahul-congress.jpg" alt="support" />
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const current = document.body.getAttribute("data-theme");
+      document.body.setAttribute("data-theme", current === "light" ? "dark" : "light");
+    }
+  </script>
+</body>
+</html>
